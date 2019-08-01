@@ -27,7 +27,6 @@ var server = http.createServer(app);
 
 server.listen(port);
 server.on('close', () => {
-  chrome.close();
 });
 server.on('error', onError);
 server.on('listening', onListening);
@@ -85,8 +84,6 @@ function onError(error) {
  */
 
 function onListening() {
-  chrome.getPage()
-
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr

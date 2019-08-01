@@ -7,7 +7,6 @@ const chrome = require('../chrome')
 var crypto = require('crypto')
 
 router.get('/', async function (req, res, next) {
-
   const { url, method, data, title } = req.query;
 
   if (!url || !data || !method) {
@@ -22,6 +21,7 @@ router.get('/', async function (req, res, next) {
   const fileKey = './image/' + shasum.digest('hex');
   console.log(fileKey);
 
+
   if (fs.existsSync(fileKey)) {
     const img = fs.readFileSync(fileKey)
 
@@ -34,6 +34,17 @@ router.get('/', async function (req, res, next) {
 
     return;
   }
+
+
+  const browser = await puppeteer.launch({ executablePath: "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe" })
+  const page = await browser.newPage();
+
+  page.setViewport({
+    width: 600,
+    height: 600,
+    deviceScaleFactor: 1,
+  });
+
 
   await page.goto(toUrl);
 
@@ -52,6 +63,8 @@ router.get('/', async function (req, res, next) {
 
     //同步方法
     fs.writeFileSync(fileKey, n);
+
+    await browser.close();
   }, 500)
 
 });
